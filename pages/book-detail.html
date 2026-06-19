@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Detail — Scramblet Store</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-logo"><img src="images/logo.png" alt="Scramblet Store" class="nav-logo-img"> Scramblet<span>Store</span></a>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="books.html">Browse Books</a></li>
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="cart.html" class="nav-cart">🛒 Cart <span class="cart-count" style="display:none">0</span></a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="../index.html">Home</a> › <a href="books.html">Books</a> › <span id="breadTitle">Book Detail</span>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="detail-grid" id="detailContent">
+      <div style="text-align:center; padding:4rem; color:var(--text-light);">Loading book details...</div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Books -->
+<section class="section bg-cream">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-eyebrow">Discover More</span>
+      <h2 class="section-title">You May Also Like</h2>
+    </div>
+    <div class="books-grid" id="relatedBooks"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">📚 Scramblet<span>Store</span></div>
+        <p class="footer-tagline">Enriching the community with knowledge, one book at a time.</p>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="books.html">Browse Books</a></li>
+        <li><a href="cart.html">My Cart</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2025/2026 Scramblet Store. BIW20303 Web Design — UTHM.</span></div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const bookId = parseInt(params.get('id'));
+  const book = books.find(b => b.id === bookId);
+  const colors = { Fiction:'#1A3A6B', 'Self-Help':'#2D5016', 'Non-Fiction':'#3D1A6B', Fantasy:'#5C2D00', 'Sci-Fi':'#002B45', Biography:'#4A1C1C', Children:'#1A4A3A' };
+
+  if (book) {
+    document.title = `${book.title} — Scramblet Store`;
+    document.getElementById('breadTitle').textContent = book.title;
+
+    document.getElementById('detailContent').innerHTML = `
+      <div class="detail-cover" style="background:${colors[book.genre] || '#1A2E47'}">
+        ${book.emoji}
+        ${book.badge ? `<div style="margin-top:1rem; display:inline-block; background:var(--amber); color:var(--navy); font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:10px;">${book.badge}</div>` : ''}
+      </div>
+      <div>
+        <div class="detail-genre">${book.genre}</div>
+        <h1 class="detail-title">${book.title}</h1>
+        <p class="detail-author" style="font-size:1rem;">by <strong>${book.author}</strong></p>
+        <div style="display:flex; align-items:center; gap:0.5rem; margin:0.75rem 0;">
+          <span class="stars" style="font-size:1rem;">${renderStars(book.rating)}</span>
+          <span style="font-size:0.9rem; color:var(--text-mid);">${book.rating} out of 5</span>
+        </div>
+        <div class="detail-price-block">
+          <span class="detail-price">RM ${book.price.toFixed(2)}</span>
+          ${book.oldPrice ? `<span class="detail-price-old">RM ${book.oldPrice.toFixed(2)}</span><span style="background:rgba(232,160,32,0.15); color:var(--amber-dark); font-size:0.78rem; font-weight:700; padding:2px 8px; border-radius:10px;">SAVE RM ${(book.oldPrice - book.price).toFixed(2)}</span>` : ''}
+        </div>
+        <p class="detail-desc">${book.description}</p>
+        <div class="detail-meta">
+          <div class="meta-item"><div class="meta-label">Pages</div><div class="meta-value">${book.pages}</div></div>
+          <div class="meta-item"><div class="meta-label">Year</div><div class="meta-value">${book.year}</div></div>
+          <div class="meta-item"><div class="meta-label">Publisher</div><div class="meta-value">${book.publisher}</div></div>
+          <div class="meta-item"><div class="meta-label">Language</div><div class="meta-value">${book.language}</div></div>
+          <div class="meta-item" style="grid-column:1/-1"><div class="meta-label">ISBN</div><div class="meta-value">${book.isbn}</div></div>
+        </div>
+        <div style="display:flex; gap:1rem;">
+          <button class="add-to-cart-btn" style="flex:1" onclick="addToCart(${book.id})">🛒 Add to Cart</button>
+          <button onclick="window.location.href='cart.html'" style="flex:0.4; padding:1rem; background:var(--navy); color:var(--cream); border:none; border-radius:6px; font-weight:600; cursor:pointer; font-family:inherit; transition:background 0.2s;" onmouseover="this.style.background='var(--navy-light)'" onmouseout="this.style.background='var(--navy)'">View Cart</button>
+        </div>
+      </div>
+    `;
+
+    // Related books (same genre, exclude current)
+    const related = books.filter(b => b.genre === book.genre && b.id !== book.id).slice(0, 4);
+    if (related.length > 0) {
+      document.getElementById('relatedBooks').innerHTML = related.map(bookCardHTML).join('');
+    } else {
+      document.querySelector('.section.bg-cream').style.display = 'none';
+    }
+  } else {
+    document.getElementById('detailContent').innerHTML = `
+      <div style="text-align:center; padding:4rem; grid-column:1/-1;">
+        <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
+        <h2 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.5rem;">Book Not Found</h2>
+        <p style="color:var(--text-mid); margin-bottom:1.5rem;">This book doesn't exist in our catalogue.</p>
+        <a href="books.html" class="btn btn-primary">Browse All Books</a>
+      </div>`;
+  }
+</script>
+</body>
+</html>
