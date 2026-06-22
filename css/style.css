@@ -121,6 +121,37 @@ body {
   font-weight: 700;
 }
 
+.nav-auth-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-username {
+  color: var(--cream);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.nav-logout-btn {
+  background: transparent;
+  border: 1px solid rgba(245,237,214,0.35);
+  color: rgba(245,237,214,0.85);
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-logout-btn:hover {
+  background: rgba(232,160,32,0.2);
+  border-color: var(--amber);
+  color: var(--cream);
+}
+
 .hamburger {
   display: none;
   flex-direction: column;
@@ -758,6 +789,8 @@ footer {
   .form-row { grid-template-columns: 1fr; }
   .btn-outline { display: none; }
   .hero { padding: 3rem 1rem; }
+  .nav-auth-item { flex-direction: column; align-items: flex-start; width: 100%; padding: 0.5rem 1rem; gap: 0.5rem; }
+  .nav-logout-btn { width: 100%; text-align: center; }
 }
 
 /* ============ UTILS ============ */

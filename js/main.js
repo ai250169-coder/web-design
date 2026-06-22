@@ -160,9 +160,63 @@ function bookCardHTML(book, opts = {}) {
     </a>`;
 }
 
+// ---- Auth Nav (Login / Logout swap) ----
+function getCurrentUser() {
+  try {
+    return JSON.parse(sessionStorage.getItem('scramblet_user') || 'null');
+  } catch (e) {
+    return null;
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem('scramblet_user');
+  const inPages = window.location.pathname.includes('/pages/');
+  window.location.href = inPages ? '../index.html' : 'index.html';
+}
+
+function renderAuthNav() {
+  const user = getCurrentUser();
+  const navList = document.querySelector('.nav-links');
+
+  // ---- Nav login link: swap for username + logout button ----
+  if (navList) {
+    const loginLink = navList.querySelector('a[href$="login.html"]');
+    const loginItem = loginLink ? loginLink.closest('li') : null;
+
+    // Remove any previously injected auth item so we don't duplicate on re-render
+    const existingAuthItem = navList.querySelector('.nav-auth-item');
+    if (existingAuthItem) existingAuthItem.remove();
+
+    if (loginItem) {
+      if (user) {
+        loginItem.style.display = 'none';
+
+        const authItem = document.createElement('li');
+        authItem.className = 'nav-auth-item';
+        authItem.innerHTML = `
+          <span class="nav-username">👤 ${user.name}</span>
+          <button class="nav-logout-btn" onclick="logout()" type="button">Logout</button>
+        `;
+        loginItem.insertAdjacentElement('afterend', authItem);
+      } else {
+        loginItem.style.display = '';
+      }
+    }
+  }
+
+  // ---- Any other login links on the page (e.g. footer Quick Links) ----
+  document.querySelectorAll('a[href$="login.html"]').forEach(link => {
+    if (navList && navList.contains(link)) return; // already handled above
+    const item = link.closest('li') || link;
+    item.style.display = user ? 'none' : '';
+  });
+}
+
 // ---- Init on load ----
 document.addEventListener('DOMContentLoaded', () => {
   setActiveNav();
   initHamburger();
   updateCartBadge();
+  renderAuthNav();
 });

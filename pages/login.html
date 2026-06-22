@@ -23,6 +23,8 @@
   </div>
 </nav>
 
+<main>
+
 <section class="auth-section">
   <div class="auth-card">
     <div class="auth-header">
@@ -109,8 +111,15 @@
   </div>
 </section>
 
+</main>
+
 <script src="../js/main.js"></script>
 <script>
+  // If already logged in, no need to show the login form
+  if (getCurrentUser()) {
+    window.location.href = '../index.html';
+  }
+
   function switchTab(tab) {
     document.getElementById('tabLoginBtn').classList.toggle('active', tab === 'login');
     document.getElementById('tabRegisterBtn').classList.toggle('active', tab === 'register');
